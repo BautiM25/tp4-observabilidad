@@ -1,0 +1,38 @@
+# values-kube-prometheus-stack.yaml para Minikube
+
+alertmanager:
+  enabled: false
+
+grafana:
+  enabled: true
+  resources:
+    limits:
+      memory: 768Mi
+    requests:
+      memory: 256Mi
+  additionalDataSources:
+    - name: Loki
+      type: loki
+      access: proxy
+      url: http://loki.observabilidad.svc.cluster.local:3100
+      isDefault: false
+      jsonData:
+        maxLines: 1000
+
+# Deshabilitar recolectores de control plane no expuestos en minikube para tener 0 targets caídos
+kubeControllerManager:
+  enabled: false
+
+kubeScheduler:
+  enabled: false
+
+kubeEtcd:
+  enabled: false
+
+kubeProxy:
+  enabled: false
+
+prometheus:
+  prometheusSpec:
+    serviceMonitorSelectorNilUsesHelmValues: false
+    serviceMonitorSelector: {}
